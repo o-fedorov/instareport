@@ -62,6 +62,21 @@ docs = ["sphinx", "zope.interface"]
 tests = ["coverage", "hypothesis", "pympler", "pytest", "six", "zope.interface"]
 
 [[package]]
+name = "beautifulsoup4"
+version = "4.10.0"
+description = "Screen-scraping library"
+category = "main"
+optional = false
+python-versions = ">3.0.0"
+
+[package.dependencies]
+soupsieve = ">1.2"
+
+[package.extras]
+html5lib = ["html5lib"]
+lxml = ["lxml"]
+
+[[package]]
 name = "certifi"
 version = "2021.10.8"
 description = "Python package for providing Mozilla's CA Bundle."
@@ -160,6 +175,18 @@ attrs = "19.1.0"
 maxminddb = ">=1.4.1"
 
 [[package]]
+name = "proxyscrape"
+version = "0.3.0"
+description = "A library for retrieving free proxies (HTTP, HTTPS, SOCKS4, SOCKS5)."
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+BeautifulSoup4 = "*"
+requests = "*"
+
+[[package]]
 name = "pycares"
 version = "4.1.2"
 description = "Python interface for c-ares"
@@ -200,6 +227,14 @@ socks = ["PySocks (>=1.5.6,!=1.5.7)", "win-inet-pton"]
 use_chardet_on_py3 = ["chardet (>=3.0.2,<5)"]
 
 [[package]]
+name = "soupsieve"
+version = "2.3.1"
+description = "A modern CSS selector implementation for Beautiful Soup."
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[[package]]
 name = "urllib3"
 version = "1.26.8"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
@@ -227,7 +262,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "45bd897e720bdfe4e92af2df95c9aab3b55a306e157988ffbb7aea99e7be8d57"
+content-hash = "26757fdd00c12de0e4ba5c34225441193b2bbb0a26c3dc9c416eacdbec20a10a"
 
 [metadata.files]
 aiodns = [
@@ -319,6 +354,10 @@ async-timeout = [
 attrs = [
     {file = "attrs-19.1.0-py2.py3-none-any.whl", hash = "sha256:69c0dbf2ed392de1cb5ec704444b08a5ef81680a61cb899dc08127123af36a79"},
     {file = "attrs-19.1.0.tar.gz", hash = "sha256:f0b870f674851ecbfbbbd364d6b5cbdff9dcedbc7f3f5e18a6891057f21fe399"},
+]
+beautifulsoup4 = [
+    {file = "beautifulsoup4-4.10.0-py3-none-any.whl", hash = "sha256:9a315ce70049920ea4572a4055bc4bd700c940521d36fc858205ad4fcde149bf"},
+    {file = "beautifulsoup4-4.10.0.tar.gz", hash = "sha256:c23ad23c521d818955a4151a67d81580319d4bf548d3d49f4223ae041ff98891"},
 ]
 certifi = [
     {file = "certifi-2021.10.8-py2.py3-none-any.whl", hash = "sha256:d62a0163eb4c2344ac042ab2bdf75399a71a2d8c7d47eac2e2ee91b9d6339569"},
@@ -521,6 +560,10 @@ proxybroker = [
     {file = "proxybroker-0.3.2-py3-none-any.whl", hash = "sha256:2b02fdf903de4b0875c7b811bd95a7e76cb313e3a96b9069a4f37b9979f07674"},
     {file = "proxybroker-0.3.2.tar.gz", hash = "sha256:a358533b8dc56c4500b54d8786c998e75687ff21843e6672e6b1409c867a9350"},
 ]
+proxyscrape = [
+    {file = "proxyscrape-0.3.0-py2.py3-none-any.whl", hash = "sha256:ab73e76d43693dba79ed8fa5bfda4977aca7e12856e57cb8588be9e7bc1fcbcf"},
+    {file = "proxyscrape-0.3.0.tar.gz", hash = "sha256:9291bb8ce48dc0adf0dea41d5c205f7703f9cb3b443ce79e85fc4af0bbe2207d"},
+]
 pycares = [
     {file = "pycares-4.1.2-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:71b99b9e041ae3356b859822c511f286f84c8889ec9ed1fbf6ac30fb4da13e4c"},
     {file = "pycares-4.1.2-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:c000942f5fc64e6e046aa61aa53b629b576ba11607d108909727c3c8f211a157"},
@@ -561,6 +604,10 @@ pycparser = [
 requests = [
     {file = "requests-2.27.1-py2.py3-none-any.whl", hash = "sha256:f22fa1e554c9ddfd16e6e41ac79759e17be9e492b3587efa038054674760e72d"},
     {file = "requests-2.27.1.tar.gz", hash = "sha256:68d7c56fd5a8999887728ef304a6d12edc7be74f1cfa47714fc8b414525c9a61"},
+]
+soupsieve = [
+    {file = "soupsieve-2.3.1-py3-none-any.whl", hash = "sha256:1a3cca2617c6b38c0343ed661b1fa5de5637f257d4fe22bd9f1338010a1efefb"},
+    {file = "soupsieve-2.3.1.tar.gz", hash = "sha256:b8d49b1cd4f037c7082a9683dfa1801aa2597fb11c3a1155b7a5b94829b4f1f9"},
 ]
 urllib3 = [
     {file = "urllib3-1.26.8-py2.py3-none-any.whl", hash = "sha256:000ca7f471a233c2251c6c7023ee85305721bfdf18621ebff4fd17a8653427ed"},
