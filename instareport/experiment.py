@@ -1,12 +1,14 @@
-"""Check the effectivenes of the approach."""
+"""Check the effectiveness of the approach."""
 import ssl
-from itertools import cycle
+from collections import Counter
+from concurrent.futures import ThreadPoolExecutor
+from functools import partial
 from pathlib import Path
 
-from requests import Session
-from requests.exceptions import ProxyError, SSLError
-
-from instareport.vendor import proxy_harvester, user_agents
+import requests
+from instareport.proxy import ProxyPool
+from instareport.vendor import user_agents
+from requests.exceptions import RequestException
 
 ROOT = Path(__file__).parent.parent
 STUBS = ROOT / "stubs"
@@ -15,49 +17,56 @@ CHECK = STUBS / "check.txt"
 
 
 def main():
-    """Check the accounts to ensure they are allive."""
-    proxies = iter(cycle(proxy_harvester.find_proxies()))
+    """Check the accounts to ensure they are alive."""
+    proxies = ProxyPool()
 
-    test_statuses = 0
-    check_statuses = 0
+    tasks = {}
 
     for line in TEST.read_text().splitlines():
-        test_statuses += check_is_alive(line, proxies)
+        tasks[line] = "test"
 
     for line in CHECK.read_text().splitlines():
-        check_statuses += check_is_alive(line, proxies)
+        tasks[line] = "check"
 
-    print("Test users:", test_status, "\nControl users:", check_statuses)
+    with ThreadPoolExecutor() as executor:
+        counts = Counter(
+            zip(
+                tasks.values(),
+                executor.map(partial(check_is_alive, proxies=proxies), tasks),
+            )
+        )
+
+    print(counts)
 
 
 def check_is_alive(account, proxies):
     print("Checking", account)
     while True:
+        proxy = proxies.pop()
+
         try:
-            return _check_is_alive(account, next(proxies))
-        except (ssl.SSLError, ProxyError, SSLError):
-            print("    Proxy error occured, retrying.")
+            result = _check_is_alive(account, proxy)
+        except (ssl.SSLError, RequestException) as err:
+            print("    Request error occurred, retrying:", type(err))
+        else:
+            print("    Good proxy:", proxy),
+            proxies.push(proxy)
+            return result
 
 
 def _check_is_alive(account, proxy):
-    """Check if specific account is allive."""
-    session = Session()
-
-    session.proxies = {
-        "https": f"https://{ proxy }",
-        "http": f"https://{ proxy }",
-    }
-
-    resp = session.get(
-        f"https://instagram.com/{ account }", 
+    """Check if specific account is alive."""
+    resp = requests.get(
+        f"https://instagram.com/{ account }",
         headers={"User-Agent": user_agents.get_user_agent()},
-        timeout=10
+        timeout=10,
+        proxies = {"https": f"http://{ proxy }"}
     )
     if resp.status_code == 404:
-        print("    The account is off.")
+        print("--->", account, ": the account is off.", "<---")
         return False
     if resp.status_code < 300:
-        print("    The account is On.")
+        print("--->", account, ": the account is on.", "<---")
         return True
 
     resp.raise_for_status()

@@ -8,10 +8,10 @@ authors = ["Your Name <you@example.com>"]
 python = "^3.8"
 requests = "^2.27.1"
 colorama = "^0.4.4"
-proxybroker = "^0.3.2"
 
 [tool.poetry.dev-dependencies]
 isort = "^5.10.1"
+black = "^22.1.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
