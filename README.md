@@ -1,2 +1,2 @@
-# instagun
+# instareport
 Report propaganda accounts
