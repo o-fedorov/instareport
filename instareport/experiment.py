@@ -3,11 +3,10 @@ import ssl
 from itertools import cycle
 from pathlib import Path
 
-import proxyscrape
 from requests import Session
-from requests.exceptions import ProxyError, SSLError, ConnectTimeout
+from requests.exceptions import ProxyError, SSLError
 
-from instareport.vendor import user_agents
+from instareport.vendor import proxy_harvester, user_agents
 
 ROOT = Path(__file__).parent.parent
 STUBS = ROOT / "stubs"
@@ -17,7 +16,7 @@ CHECK = STUBS / "check.txt"
 
 def main():
     """Check the accounts to ensure they are allive."""
-    proxies = proxyscrape.create_collector('my-collector', 'https')
+    proxies = iter(cycle(proxy_harvester.find_proxies()))
 
     test_statuses = 0
     check_statuses = 0
@@ -28,17 +27,15 @@ def main():
     for line in CHECK.read_text().splitlines():
         check_statuses += check_is_alive(line, proxies)
 
-    print("Test users:", test_statuses, "\nControl users:", check_statuses)
+    print("Test users:", test_status, "\nControl users:", check_statuses)
 
 
 def check_is_alive(account, proxies):
     print("Checking", account)
     while True:
-        proxy = proxies.get_proxy()
-
         try:
-            return _check_is_alive(account, proxy)
-        except (ssl.SSLError, ProxyError, SSLError, ConnectTimeout):
+            return _check_is_alive(account, next(proxies))
+        except (ssl.SSLError, ProxyError, SSLError):
             print("    Proxy error occured, retrying.")
 
 
@@ -46,11 +43,10 @@ def _check_is_alive(account, proxy):
     """Check if specific account is allive."""
     session = Session()
 
-    print("    Using proxy", proxy)
-    if proxy:
-        session.proxies = {
-            "https": f"https://{ proxy }",
-        }
+    session.proxies = {
+        "https": f"https://{ proxy }",
+        "http": f"https://{ proxy }",
+    }
 
     resp = session.get(
         f"https://instagram.com/{ account }", 
