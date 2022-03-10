@@ -14,7 +14,7 @@ import requests
 @click.argument("input_file", type=click.File("r"))
 def report(input_file, username, password, wait, check):
     session = requests.session()
-    accounts_stats = {}
+    accounts_stats = {True: [], False: []}
 
     login_resp = session.post(
         "https://www.instagram.com/accounts/login/ajax/",
@@ -83,10 +83,10 @@ def report(input_file, username, password, wait, check):
                 )
             else:
                 print("The account is already off")
-                accounts_stats[False] = target_account
+                accounts_stats[False].append(target_account)
             continue
 
-        accounts_stats[False] = target_account
+        accounts_stats[True].append(target_account)
 
         if check:
             continue
