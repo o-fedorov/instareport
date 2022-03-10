@@ -103,8 +103,8 @@ def report(input_file, username, password, wait, check):
 
     time.sleep(wait)
 
-    print("Done. Already disabled accounts:", len(accounts_stats[False]), "still active:", len(accounts_stats[True]))
-    print("Active accounts:")
+    print("\n\nDone. \nAlready disabled accounts:", len(accounts_stats[False]), "\nStill active:", len(accounts_stats[True]))
+    print("\nActive accounts:\n")
     for account in accounts_stats[True]:
         print(account)
 
