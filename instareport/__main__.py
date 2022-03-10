@@ -10,9 +10,11 @@ import requests
 @click.option("--username", prompt=True, default=lambda: os.environ.get("USER", ""))
 @click.password_option(confirmation_prompt=False)
 @click.option("-w", "--wait", default=3.0, type=float, help="wait time between calls.")
+@click.option("--check", is_flag=True, help="Just check if the account is alive, without any report.")
 @click.argument("input_file", type=click.File("r"))
-def report(input_file, username, password, wait=3.0):
+def report(input_file, username, password, wait, check):
     session = requests.session()
+    accounts_stats = {}
 
     login_resp = session.post(
         "https://www.instagram.com/accounts/login/ajax/",
@@ -59,14 +61,34 @@ def report(input_file, username, password, wait=3.0):
         )
 
         try:
-            account_id = account_details_resp.json()["graphql"]["user"]["id"]
-        except (KeyError, JSONDecodeError):
+            account_id_payload = account_details_resp.json()
+        except JSONDecodeError:
             print(
                 "\n\nFailed to get account ID:\n",
                 account_details_resp.status_code,
                 account_details_resp.text,
                 "\n\n",
             )
+            continue
+
+        try:
+            account_id = account_id_payload["graphql"]["user"]["id"]
+        except KeyError:
+            if account_id_payload:
+                print(
+                    "\n\nFailed to get account ID:\n",
+                    account_details_resp.status_code,
+                    account_id_payload,
+                    "\n\n",
+                )
+            else:
+                print("The account is already off")
+                accounts_stats[False] = target_account
+            continue
+
+        accounts_stats[False] = target_account
+
+        if check:
             continue
 
         report = session.post(
@@ -81,7 +103,10 @@ def report(input_file, username, password, wait=3.0):
 
     time.sleep(wait)
 
-    print("Done")
+    print("Done. Already disabled accounts:", len(accounts_stats[False]), "still active:", len(accounts_stats[True]))
+    print("Active accounts:")
+    for account in accounts_stats[True]:
+        print(account)
 
 
 if __name__ == "__main__":

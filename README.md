@@ -41,8 +41,12 @@ Instagram username and password.  Note that
 the password is not displayed when you type it in.
 
 ```shell
-poetry run instareport channels.txt
+poetry run instareport accounts.txt
 ```
+
+There is also a tool to extract accounts from arbitrary text containing
+Instagram links, call it as `poetry run instareport accounts.txt` and
+follow the instructions.
 
 ## UKR
 
@@ -83,5 +87,10 @@ _blacktivistt_
 коли ви їх набираєте.
 
 ```shell
-poetry run instareport channels.txt
+poetry run instareport accounts.txt
 ```
+
+Також є програма, що знаходить назви акканутів в будь-якому тексті
+що містить Instagram-посилання, запустіть її так:
+`poetry run instareport accounts.txt` , вставте текст в термінал,
+і в кінці натисніть комбінацію клавіш `Ctr+C` (`Cmd+C`).
