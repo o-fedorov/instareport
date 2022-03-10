@@ -54,7 +54,7 @@ def report(input_file, username, password, wait, check):
     for target_account in input_file:
         target_account = target_account.strip()
 
-        print(f"Reporting of {target_account}")
+        print("Handling", target_account)
 
         account_details_resp = session.get(
             f"https://www.instagram.com/{target_account}/?__a=1"
