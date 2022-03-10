@@ -11,7 +11,30 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "justMyCode": false,
-            "env": {"PYTHONPATH": "."}
+            "args": [
+                "${input:file}",
+            ],
+            "env": {
+                "PYTHONPATH": "."
+            }
+        }
+    ],
+    "inputs": [
+        {
+            "id": "file",
+            "type": "promptString",
+            "description": "the file with accounts to report"
+        },
+        {
+            "id": "username",
+            "type": "promptString",
+            "description": "the name of the user"
+        },
+        {
+            "id": "password",
+            "type": "promptString",
+            "description": "the password of the user",
+            "password": true
         }
     ]
 }

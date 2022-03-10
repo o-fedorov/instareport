@@ -1,17 +1,21 @@
 [tool.poetry]
 name = "instareport"
 version = "0.1.0"
-description = ""
-authors = ["Your Name <you@example.com>"]
+description = "Report propaganda accounts on Instagram"
+authors = ["Oleksandr Fedorov <a.g.fedorof@gmail.com>"]
+license = "MIT"
 
 [tool.poetry.dependencies]
 python = "^3.8"
 requests = "^2.27.1"
-colorama = "^0.4.4"
+click = "^8.0.4"
 
 [tool.poetry.dev-dependencies]
 isort = "^5.10.1"
 black = "^22.1.0"
+
+[tool.poetry.scripts]
+instareport = 'instareport.__main__:report'
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
